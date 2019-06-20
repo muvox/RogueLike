@@ -11,6 +11,9 @@ Engine::Engine(int screenWidth, int screenHeight) :
 }
 
 void Engine::init(){
+    if(TCODSystem::fileExists("game.sav")){
+        TCODSystem::deleteFile("game.sav");
+    }
     player = new Actor(40,25,'@',"player",TCODColor::white);
     player->destructible=new PlayerDestructible(30,2,"your cadaver");
     player->attacker=new Attacker(5);
@@ -65,6 +68,7 @@ void Engine::load() {
         engine.terminate();
         engine.init();
     } else {
+        engine.terminate();
         //load the game
         TCODZip zip;
         zip.loadFromFile("game.sav");
@@ -114,6 +118,8 @@ void Engine::update() {
     if( lastKey.vk == TCODK_ESCAPE ){
         save();
         load();
+
+
     }
     player->update();
     if ( gameStatus == NEW_TURN ) {
